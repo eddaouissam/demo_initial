@@ -60,4 +60,17 @@ L'extension Snowflake sur **VSCode** est optimale pour exécuter ces scripts dir
 
 Après la configuration, pour exécuter les modèles :
 ```bash
-dbt run
+dbt run 
+```
+
+## Quelques Résultats
+Ci-dessous, trois figures illustrant les environnements `DEV_DB`, `PRE_PROD_DB`, et `PROD_DB` dans Snowflake :
+
+![DEV_DB](images/PRE_PROD_DB.png)
+- **Figure 1** : Environnement de développement (`DEV_DB`) où le travail est fait manuellement.
+
+![DEV_DB](images/DEV_DB.png)
+- **Figure 2** : Environnement de préproduction (`PRE_PROD_DB`) pour les tests automatisés avec le workflow CI.
+
+![DEV_DB](images/PROD_DB.png)
+- **Figure 3** : Environnement de production (`PROD_DB`) alimenté via le workflow CD et mis à jour régulièrement.
