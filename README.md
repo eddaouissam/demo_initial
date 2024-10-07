@@ -1,6 +1,8 @@
 # demo_initial
 
-Ce dépôt contient un projet dbt (Data Build Tool) pour la transformation des données dans Snowflake, avec un workflow structuré sur deux branches et trois environnements de bases de données : DEV_DB, PRE_PROD_DB, et PROD_DB.
+Ce dépôt contient un projet dbt (Data Build Tool) pour la transformation des données dans Snowflake, un fichier de setup de l'infra sur Snowflake. Avec un workflow structuré sur deux branches et trois environnements de bases de données : DEV_DB, PRE_PROD_DB, et PROD_DB. 
+
+*DEMO POMONA*
 
 ## Structure du projet
 
@@ -9,6 +11,8 @@ Ce dépôt contient un projet dbt (Data Build Tool) pour la transformation des d
 - **tests/** : Tests de validation des données.
 - **snapshots/** : Captures de données dans le temps.
 - **setup_scripts/** : Scripts d’initialisation du projet.
+
+**N.B** : Le processus pourra être adapté en fonction des besoins.
 
 ## Prérequis
 
@@ -47,7 +51,12 @@ Les bases de données sont configurées de la manière suivante :
 2. **CD Workflow** :
    - Déclenché après le merge de la PR et à intervalle régulier (grâce à un cron job), il maintient les modèles à jour dans `PROD_DB`.
 
-## Lancer dbt
+## Dossier setup_scripts
+
+Le dossier `setup_scripts` contient les DDL nécessaires pour configurer l'infrastructure et le RBAC dans Snowflake (rôles, utilisateurs, virtual warehouses, etc.).  
+L'extension Snowflake sur **VSCode** est optimale pour exécuter ces scripts directement.
+
+## Lancer dbt :D
 
 Après la configuration, pour exécuter les modèles :
 ```bash
