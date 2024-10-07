@@ -1,0 +1,61 @@
+name: CD for DBT (PROD with a CRON)
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Every 5 minutes
+  
+  # pull_request:
+  #   types:
+  #   - closed
+  #   branches:
+  #   - prod
+jobs:
+  dbt_ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install DBT and Snowflake adapter
+        run: |
+          pip install dbt-core dbt-snowflake
+      - name: Set up dbt profile
+        run: |
+          mkdir -p ~/.dbt
+          echo "
+          demo_initial:
+            outputs:
+              dev:
+                account: $SNOWFLAKE_ACCOUNT
+                database: $SNOWFLAKE_PROD_DB
+                password: $SNOWFLAKE_PASSWORD
+                role: $SNOWFLAKE_PROD_ROLE
+                schema: PUBLIC
+                threads: 4
+                type: snowflake
+                user: $SNOWFLAKE_USERNAME
+                warehouse: $SNOWFLAKE_PROD_WH
+            target: dev
+          " > ~/.dbt/profiles.yml
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USERNAME: ${{ secrets.SNOWFLAKE_USERNAME }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_PROD_ROLE: ${{ secrets.SNOWFLAKE_PROD_ROLE }}
+          SNOWFLAKE_PROD_DB: ${{ secrets.SNOWFLAKE_PROD_DB }}
+          SNOWFLAKE_PROD_WH: ${{ secrets.SNOWFLAKE_PROD_WH }}
+
+      - name: DBT debug
+        run: dbt debug
+
+      - name: DBT deps
+        run: dbt deps
+
+      - name: DBT run
+        run: dbt run
