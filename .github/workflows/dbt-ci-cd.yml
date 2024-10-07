@@ -1,0 +1,77 @@
+name: DBT CI/CD Pipeline
+
+# Trigger this workflow on push or pull request to certain branches
+on:
+  push:
+    branches:
+      - dev
+      - pre_prod
+      - main
+  pull_request:
+    branches:
+      - pre_prod
+      - prod
+
+jobs:
+  # Step 1: Linting the code (DBT model and SQL)
+  lint:
+    name: Lint DBT and SQL
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install DBT and Linter Tools
+        run: |
+          pip install dbt-snowflake sqlfluff
+
+      - name: Lint SQL with sqlfluff
+        run: |
+          sqlfluff lint models/**/*.sql
+          
+      - name: Lint DBT Project
+        run: |
+          dbt run --target dev
+
+  # Step 2: Deploy changes to Snowflake (based on branch)
+  deploy:
+    name: Deploy to Snowflake
+    runs-on: ubuntu-latest
+    needs: lint  # Runs after the linting job passes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install DBT
+        run: |
+          pip install dbt-snowflake
+
+      - name: Deploy to DEV Environment
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          dbt run --target dev
+          dbt test --target dev
+
+      - name: Deploy to PRE-PROD Environment
+        if: github.ref == 'refs/heads/pre_prod'
+        run: |
+          dbt run --target pre_prod
+          dbt test --target pre_prod
+
+      - name: Deploy to PROD Environment
+        if: github.ref == 'refs/heads/prod'
+        run: |
+          dbt run --target prod
+          dbt test --target prod
