@@ -51,7 +51,7 @@ jobs:
           SNOWFLAKE_PRE_PROD_WH: ${{ secrets.SNOWFLAKE_PRE_PROD_WH }}
       
 
-      - name: SQLFLUFF lint
+      - name: SQLFLUFF lint examle
         run: sqlfluff lint models/marts/fct_orders.sql
       - name: DBT debug
         run: dbt debug
