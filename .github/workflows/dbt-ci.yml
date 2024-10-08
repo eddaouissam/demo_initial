@@ -23,7 +23,7 @@ jobs:
         run: |
           pip install dbt-core dbt-snowflake
       - name: Install sqlfluff
-        run: pip install sqlfluff
+        run: pip install sqlfluff sqlfluff-templater-dbt
       - name: Set up dbt profile
         run: |
           mkdir -p ~/.dbt
