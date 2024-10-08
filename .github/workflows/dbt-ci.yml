@@ -3,7 +3,7 @@ name: CI for DBT (PRE-PROD)
 on:
   pull_request:
     types:
-    - open
+    - opened
     branches:
     - develop
 jobs:
