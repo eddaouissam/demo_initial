@@ -3,9 +3,9 @@ name: CI for DBT (PRE-PROD)
 on:
   pull_request:
     types:
-    - closed
+    - open
     branches:
-    - prod
+    - develop
 jobs:
   dbt_ci:
     runs-on: ubuntu-latest
