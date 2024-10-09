@@ -2,7 +2,7 @@ name: CD for DBT (PROD with a CRON)
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # Every 5 minutes
+    - cron: '0 0 * * *' # Runs at midnight every day
   
   # pull_request:
   #   types:
