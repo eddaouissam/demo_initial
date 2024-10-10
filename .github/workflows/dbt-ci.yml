@@ -3,9 +3,9 @@ name: CI for DBT (PRE-PROD)
 on:
   pull_request:
     types:
-    - closed
+    - opened
     branches:
-    - prod
+    - develop
 jobs:
   dbt_ci:
     runs-on: ubuntu-latest
@@ -22,6 +22,8 @@ jobs:
       - name: Install DBT and Snowflake adapter
         run: |
           pip install dbt-core dbt-snowflake
+      - name: Install sqlfluff
+        run: pip install sqlfluff sqlfluff-templater-dbt
       - name: Set up dbt profile
         run: |
           mkdir -p ~/.dbt
@@ -47,7 +49,10 @@ jobs:
           SNOWFLAKE_PRE_PROD_ROLE: ${{ secrets.SNOWFLAKE_PRE_PROD_ROLE }}
           SNOWFLAKE_PRE_PROD_DB: ${{ secrets.SNOWFLAKE_PRE_PROD_DB }}
           SNOWFLAKE_PRE_PROD_WH: ${{ secrets.SNOWFLAKE_PRE_PROD_WH }}
+      
 
+      - name: SQLFLUFF lint example
+        run: sqlfluff lint models/marts/fct_orders.sql
       - name: DBT debug
         run: dbt debug
 
