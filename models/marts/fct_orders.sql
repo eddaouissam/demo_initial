@@ -1,7 +1,6 @@
 select
     orders.*,
-    order_item_summary.gross_item_sales_amount,
-    order_item_summary.item_discount_amount
+    order_item_summary.gross_item_sales_amount
 from
     {{ref('stg_tpch_orders')}} as orders
 join
