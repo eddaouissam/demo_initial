@@ -1,10 +1,10 @@
 name: CD for DBT (PROD with a CRON)
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # Runs at midnight every day
+  # schedule:
+  #   - cron: '0 0 * * *' # Runs at midnight every day
   
-  # pull_request:
+  pull_request:
   #   types:
   #   - closed
   #   branches:
